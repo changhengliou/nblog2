@@ -1,0 +1,5 @@
+{
+    "listenPort": 3000,
+    "staticDir": "static",
+    "staticRoutePrefix": "static"
+}

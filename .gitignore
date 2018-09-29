@@ -1,1 +1,3 @@
-/vendor/*
+vendor/*
+wwwroot/node_modules
+wwwroot/dist

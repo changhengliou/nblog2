@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/qq52184962/nblog2/config"
 	"github.com/qq52184962/nblog2/router"
 	"log"
 	"net/http"
@@ -38,14 +39,20 @@ func sayhelloName(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello astaxie!") //这个写入到w的是输出到客户端的
 }
 
-func main() {
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
+// cleanup code
+func closeServer(server *http.Server) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+	defer cancel()
 
+	server.Shutdown(ctx)
+	log.Println("server shutting down...")
+}
+
+func initServer(cfg *config.Config) *http.Server {
 	router := mux.NewRouter()
 
 	// serve static file
-	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	router.PathPrefix(fmt.Sprintf("/%s/", cfg.StaticRoutePrefix)).Handler(http.StripPrefix(fmt.Sprintf("/%s/", cfg.StaticRoutePrefix), http.FileServer(http.Dir(cfg.StaticDir))))
 	router.HandleFunc("/", IndexHandler)
 	router.HandleFunc("/s", IHandler)
 
@@ -58,12 +65,23 @@ func main() {
 	})
 
 	server := &http.Server{
-		Addr:         "0.0.0.0:3000",
+		Addr:         fmt.Sprintf("0.0.0.0:%d", cfg.ListenPort),
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 60,
 		Handler:      router,
 	}
+	return server
+}
+
+func main() {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	signal.Notify(c, os.Kill)
+
+	cfg := config.Read()
+
+	server := initServer(&cfg)
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
@@ -73,11 +91,8 @@ func main() {
 
 	<-c
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
-	defer cancel()
-
-	server.Shutdown(ctx)
-
-	log.Println("Server shutdown")
+	// handle shutdown
+	closeServer(server)
+	log.Println("exit ...")
 	os.Exit(0)
 }
