@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/gorilla/mux"
+	gqlHandler "github.com/graphql-go/handler"
 	"github.com/qq52184962/nblog2/config"
+	gqlSchema "github.com/qq52184962/nblog2/gql"
 	"github.com/qq52184962/nblog2/router"
 	"log"
 	"net/http"
@@ -53,9 +55,19 @@ func initServer(cfg *config.Config) *http.Server {
 
 	// serve static file
 	router.PathPrefix(fmt.Sprintf("/%s/", cfg.StaticRoutePrefix)).Handler(http.StripPrefix(fmt.Sprintf("/%s/", cfg.StaticRoutePrefix), http.FileServer(http.Dir(cfg.StaticDir))))
+
+	// graphql
+	router.Handle("/gql", gqlHandler.New(&gqlHandler.Config{
+		Schema:   &gqlSchema.Schema,
+		Pretty:   true,
+		GraphiQL: true,
+	}))
+
+	// register route handler
 	router.HandleFunc("/", IndexHandler)
 	router.HandleFunc("/s", IHandler)
 
+	// middleware
 	router.Use(route.ErrorHandler)
 	router.Use(route.Logger)
 	// custom not found handler
