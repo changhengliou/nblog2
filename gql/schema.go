@@ -13,7 +13,11 @@ type Product struct {
 	Price float64 `json:"price"`
 }
 
-var products = []Product{Product{ID: 23, Name: "apple", Info: "just an apple", Price: 10.0}}
+var products = []Product{
+	Product{ID: 23, Name: "apple", Info: "just an apple", Price: 10.0},
+	Product{ID: 24, Name: "banana", Info: "just another banana", Price: 3.0},
+	Product{ID: 25, Name: "Avocado", Info: "avocado is bit!", Price: 12.0},
+}
 
 var productType = graphql.NewObject(
 	graphql.ObjectConfig{
@@ -83,7 +87,7 @@ var mutationType = graphql.NewObject(graphql.ObjectConfig{
 		http://localhost:8080/product?query=mutation+_{create(name:"Inca Kola",info:"Inca Kola is a soft drink that was created in Peru in 1935 by British immigrant Joseph Robinson Lindley using lemon verbena (wiki)",price:1.99){id,name,info,price}}
 		*/
 		"create": &graphql.Field{
-			Type:        productType,
+			Type:        graphql.Boolean,
 			Description: "Create new product",
 			Args: graphql.FieldConfigArgument{
 				"name": &graphql.ArgumentConfig{
@@ -105,7 +109,7 @@ var mutationType = graphql.NewObject(graphql.ObjectConfig{
 					Price: params.Args["price"].(float64),
 				}
 				products = append(products, product)
-				return product, nil
+				return true, nil
 			},
 		},
 

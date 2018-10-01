@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack --mode=production",
-    "lint": "eslint --init"
+    "lint": "eslint --fix index.js"
   },
   "author": "changheng liou",
   "license": "ISC",
