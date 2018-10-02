@@ -14,13 +14,19 @@ module.exports = (env, options) => {
     },
     resolve: { extensions: ['.js', '.jsx'] },
     devServer: {
-      contentBase: path.join(__dirname),
-      port: 8080,
+      contentBase: path.join(__dirname, '..'),
+      port: 3000,
     },
     devtool: isProduction ? false : 'source-map',
     module: {
       rules:
               [{
+                type: 'javascript/auto',
+                test: /\.mjs$/,
+                include: /node_modules/,
+                use: [],
+              },
+              {
                 enforce: 'pre',
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
@@ -67,12 +73,17 @@ module.exports = (env, options) => {
         {
           template: './index.html',
           title: 'App',
-          filename: '../index.html',
+          filename: isProduction ? '../index.html' : 'index.html',
         },
       ),
       new MiniCssExtractPlugin(
         { filename: '[name].css', chunkFilename: '[id].css' },
       ),
     ],
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+      },
+    },
   };
 };
