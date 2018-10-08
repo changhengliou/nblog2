@@ -2,3 +2,4 @@ vendor/*
 client_code/node_modules
 static/dist
 static/index
+html_template/node_modules/*
