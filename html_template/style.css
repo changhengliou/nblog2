@@ -158,7 +158,7 @@ button.carousel-btn {
 }
 
 .large-card {
-    flex: 1 1 100%;
+    flex: 0 1 340px;
     margin: 6px;
 }
 

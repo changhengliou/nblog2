@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .m-h300 {
+            min-height: 300px;
+        }
+
+        .m-right {
+            margin-right: 0.33%;
+        }
+
+        .f {
+            display: flex;
+        }
+
+        .c-line {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .f-s16 {
+            font-size: 16px;
+        }
+        .f-s20 {
+            font-size: 20px;
+        }
+        .t-o {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            width: 100%;
+            white-space: nowrap;
+        }
+        .o-hidden {
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="f">
+        <div class="m-right f m-h300" style="background-color: yellow; flex: 0 0 33%; min-width: 0;">
+            <div class="c-line f-s20" style="width:100%; height: 60px;">
+                <div style="max-height:40px;" class="c-line o-hidden">
+                    A Unified Theory of Everything Wrong with the Internet, this is a long story.
+                    A Unified Theory of Everything Wrong with the Internet, this is a long story.
+                </div>
+                <div class="t-o">
+                    Preview Preview Preview Preview Preview Preview Preview Preview Preview 
+                    Preview Preview Preview Preview Preview Preview Preview Preview Preview 
+                    Preview Preview Preview Preview Preview Preview end
+                </div>
+            </div> 
+        </div>
+        <div class="m-right f m-h300" style="background-color: greenyellow; flex: 0 0 33%;"></div>
+        <div class="m-right f m-h300" style="background-color: aquamarine; flex: 0 0 33%;"></div>
+    </div>
+</body>
+
+</html>

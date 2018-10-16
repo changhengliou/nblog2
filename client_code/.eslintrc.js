@@ -16,6 +16,8 @@ module.exports = {
         "react/require-default-props": "warn",
         "react/prop-types": "warn",
         "import/no-unresolved": "warn",
-        "import/no-extraneous-dependencies": "warn"
+        "import/no-extraneous-dependencies": "warn",
+        "no-plusplus": "off",
+        "no-bitwise": "off"
     }
 };
