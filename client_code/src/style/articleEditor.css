@@ -1,0 +1,12 @@
+.editor-sidebar {
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  right: 0;
+  opacity: 0.7;
+  transition: 0.4s right ease-in;
+}
+
+.editor-sidebar.hide {
+  right: -266px;
+}

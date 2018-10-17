@@ -18,6 +18,8 @@ module.exports = {
         "import/no-unresolved": "warn",
         "import/no-extraneous-dependencies": "warn",
         "no-plusplus": "off",
-        "no-bitwise": "off"
+        "no-bitwise": "off",
+        "jsx-a11y/interactive-supports-focus": "warn",
+        "jsx-a11y/click-events-have-key-events": "warn",
     }
 };

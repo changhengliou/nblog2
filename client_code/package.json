@@ -17,6 +17,8 @@
   "dependencies": {
     "apollo-boost": "^0.1.16",
     "apollo-client": "^2.4.2",
+    "css-loader": "^1.0.0",
+    "draft-js": "^0.10.5",
     "graphql": "^14.0.2",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
@@ -24,6 +26,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.5.1",
     "react-apollo": "^2.1.11",
+    "react-beautiful-dnd": "^9.0.2",
     "react-dom": "^16.5.1",
     "react-router-dom": "^4.3.1",
     "react-waterfall": "^4.0.0",
