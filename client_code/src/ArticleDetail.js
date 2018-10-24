@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getDateTimeString } from './util';
+import { getDateTimeString } from '@/util';
 
 const renderComments = (comments) => {
   if (!Array.isArray(comments)) { return <div>No one lefts a comment yet.</div>; }

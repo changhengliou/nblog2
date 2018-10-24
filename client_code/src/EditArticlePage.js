@@ -1,8 +1,9 @@
 import React from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
-import ArticleEditor from './ArticleEditor';
-import ArticleEditorSideTool from './ArticleEditorSIdeTool';
-import { actions } from './store';
+import ArticleEditor from '@/ArticleEditor';
+import ArticleEditorSideTool from '@/ArticleEditorSIdeTool';
+import { actions } from '@/store';
+import EditorControl from '@/EditorControl';
 
 const onDragEnd = (result) => {
   if (!result.destination) return;
@@ -18,9 +19,8 @@ const onDragEnd = (result) => {
 const EditArticlePage = () => (
   <div style={{ position: 'relative' }}>
     <DragDropContext onDragEnd={onDragEnd}>
-      <div>
-        <ArticleEditor />
-      </div>
+      <EditorControl />
+      <ArticleEditor />
       <ArticleEditorSideTool />
     </DragDropContext>
   </div>

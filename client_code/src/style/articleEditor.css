@@ -1,12 +1,142 @@
+/* article editor side tool begin */
 .editor-sidebar {
   z-index: 100;
   position: fixed;
-  top: 0;
+  top: 52px;
   right: 0;
   opacity: 0.7;
-  transition: 0.4s right ease-in;
+  transition: 0.2s right ease-in;
+  height: 100%;
 }
 
 .editor-sidebar.hide {
-  right: -266px;
+  right: -250px;
+}
+/* article editor side tool end */
+
+/* editor block start */
+.editor-block-drag-tab {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #aaa;
+  font-size: 14px;
+  text-align: center;
+}
+.editor-block-drag-tab.move {
+  top: 0px;
+  left: -20px;
+}
+.editor-block-drag-tab.code {
+  top: 25px;
+  left: -20px;
+  cursor: pointer;
+}
+.editor-block-drag-tab.copy {
+  top: 50px;
+  left: -20px;
+  cursor: pointer;
+}
+.editor-block-drag-tab.delete {
+  top: 75px;
+  left: -20px;
+  cursor: pointer;
+}
+/* editor block end */
+
+/* editor control begin */
+.editor-control {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 40px;
+  padding: 6px 12px;
+  line-height: 40px;
+  text-align: center;
+  background: #e3e3e3;
+  z-index: 100;
+  white-space: nowrap;
+  overflow-y: auto;
+}
+
+.editor-control .control-btn {
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  font-size: 14px;
+  display: inline-block;
+  background: #fff;
+}
+.editor-control .control-btn:active {
+  background: #ccc;
+}
+
+.editor-control .control-btn{
+  margin: 0px 3px;
+}
+/* editor control end */
+
+/* code editor start*/
+.overlay {
+  position: fixed;
+  top:0;
+  left: 0;
+  background: #aaa;
+  opacity: 0.5;
+  width: 100%;
+  height: 100%;
+  min-width: 100vw;
+  min-height: 100vh;
+}
+.code-editor-wrap {
+  transform: translate(-50%, -50%);
+  position: fixed;
+  top: 50vh;
+  left: 50vw;
+  z-index: 150;
+  width: 50%;
+  height: 300px;
+  border: 1px solid #ccc;
+  padding: 4px;
+  box-shadow: none;
+  outline: none;
+  appearance: none;
+}
+
+.code-editor-text {
+  width: 100%;
+  border: 0px;
+  height: 260px;
+}
+
+.code-editor-btn {
+  width: 100%;
+  height: 40px;
+  font-size: 16px;
+  background: #ccc;
+  color: #fff;
+  appearance: none;
+  outline: none;
+  text-decoration: none;
+}
+/* code editor end */
+/* Rich editor */
+.RichEditor-editor .DraftEditor-root {
+  min-height: inherit;
+}
+.RichEditor-editor .DraftEditor-editorContainer {
+  min-height: inherit;
+}
+.RichEditor-editor .public-DraftEditor-content {
+  min-height: inherit;
+  cursor: text;
+  padding: 6px 12px;
 }

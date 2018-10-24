@@ -2,8 +2,8 @@
 // import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getRandomString } from './util';
-import { connect, actions } from './store';
+import { getRandomString } from '@/util';
+import { connect, actions } from '@/store';
 // import { graphql } from 'react-apollo';
 
 const renderArticle = (articles) => {

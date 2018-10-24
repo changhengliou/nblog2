@@ -1,57 +1,66 @@
 import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { connect } from './store';
+import { connect } from '@/store';
+import EditorBlock from '@/EditorBlock';
+import CodeEditor from '@/CodeEditor';
 
 const grid = 8;
-
+// snapshot.isDraggingOver
 const getItemStyle = (isDragging, draggableStyle) => ({
   userSelect: 'none',
   padding: grid * 2,
   margin: `0 0 ${grid}px 0`,
-  background: isDragging ? 'lightgreen' : 'grey',
   ...draggableStyle,
 });
 
-const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
+const getListStyle = {
   padding: grid,
-  width: 250,
-  height: '100vh',
-});
+  width: '80%',
+  minHeight: '600px',
+  margin: '65px 10% 20px 10%',
+  border: '1px solid #ccc',
+};
 
 const renderList = items => items.map((e, i) => (
   <Draggable key={e.id} draggableId={e.id} index={i}>
     {(provided, snapshot) => (
-      <div
-        ref={provided.innerRef}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
+      <EditorBlock
+        id={e.id}
+        innerRef={provided.innerRef}
+        provided={provided}
+        snapshot={snapshot}
         style={getItemStyle(
           snapshot.isDragging,
           provided.draggableProps.style,
         )}
       >
         {e.content}
-      </div>
+      </EditorBlock>
     )}
   </Draggable>
 ));
 
 const ArticleEditor = (props) => {
-  const { editorContent } = props;
+  const { editorContent, articleEditorStyle } = props;
   return (
-    <Droppable droppableId="editor-drop">
-      {(provided, snapshot) => (
-        <div
-          ref={provided.innerRef}
-          style={getListStyle(snapshot.isDraggingOver)}
-        >
-          {renderList(editorContent)}
-          {provided.placeholder}
-        </div>
-      )}
-    </Droppable>
+    <React.Fragment>
+      <Droppable droppableId="editor-drop">
+        {provided => (
+          <div
+            ref={provided.innerRef}
+            style={getListStyle}
+          >
+            {renderList(editorContent)}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+      <CodeEditor isVisible={articleEditorStyle.showCodeEditor} />
+    </React.Fragment>
   );
 };
 
-export default connect(({ editorContent }) => ({ editorContent }))(ArticleEditor);
+export default connect(({ editorContent, articleEditorStyle }) => ({
+  editorContent,
+  articleEditorStyle,
+}))(ArticleEditor);

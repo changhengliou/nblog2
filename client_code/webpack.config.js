@@ -12,7 +12,12 @@ module.exports = (env, options) => {
       filename: `[name]${isProduction ? '.min' : ''}.js`,
       publicPath: '/static/dist',
     },
-    resolve: { extensions: ['.js', '.jsx'] },
+    resolve: {
+      extensions: ['.js', '.jsx'],
+      alias: {
+        '@': path.join(__dirname, 'src'),
+      },
+    },
     devServer: {
       contentBase: path.join(__dirname, '..'),
       port: 3000,

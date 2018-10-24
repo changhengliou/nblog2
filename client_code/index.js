@@ -5,10 +5,11 @@ import { ApolloProvider } from 'react-apollo';
 import {
   BrowserRouter as Router, Route, Switch,
 } from 'react-router-dom';
-import ArticleList from './src/ArticleList';
-import ArticleDeatil from './src/ArticleDetail';
-import EditArticlePage from './src/EditArticlePage';
-import { Provider } from './src/store';
+import ArticleList from '@/ArticleList';
+import ArticleDeatil from '@/ArticleDetail';
+import EditArticlePage from '@/EditArticlePage';
+import { Provider } from '@/store';
+import '@/style/global.css';
 
 const prefix = '/static/dist';
 const client = new ApolloClient({

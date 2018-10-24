@@ -1,7 +1,7 @@
 import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { connect, actions } from './store';
-import './style/articleEditor.css';
+import { connect, actions } from '@/store';
+import '@/style/articleEditor.css';
 
 const grid = 8;
 
@@ -17,6 +17,8 @@ const getListStyle = isDraggingOver => ({
   background: isDraggingOver ? 'lightblue' : 'lightgrey',
   padding: grid,
   width: 250,
+  height: '100%',
+  overflow: 'auto',
 });
 
 const renderList = items => items.map((e, i) => (
@@ -54,6 +56,7 @@ const ArticleEditorSIdeTool = (props) => {
           borderTopLeftRadius: '60px',
           lineHeight: '60px',
           cursor: 'pointer',
+          zIndex: '100',
         }}
         onClick={actions.toggleSidebar}
       >

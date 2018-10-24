@@ -15,6 +15,7 @@ const config = {
     toolboxContent: sidebarList,
     articleEditorStyle: {
       showSideBar: true,
+      showCodeEditor: false,
     },
   },
   actionsCreators: {
@@ -34,6 +35,27 @@ const config = {
       const [tempItem] = newList.splice(src.index, 1);
       newList.splice(dest.index, 0, tempItem);
       return { editorContent: newList };
+    },
+    onEditorDelete(props, actions, id) {
+      const newList = deepCopy(props.editorContent);
+      newList.splice(newList.findIndex(e => e.id === id), 1);
+      return { editorContent: newList };
+    },
+    onEditorCopy(props, actions, id) {
+      const newList = deepCopy(props.editorContent);
+      const itemIndex = newList.findIndex(e => e.id === id);
+      const item = newList[itemIndex];
+      newList.splice(itemIndex, 0, { ...item, id: getRandomString() });
+      return { editorContent: newList };
+    },
+    setCodeEditorVisibility(props, action, isVisible) {
+      const { articleEditorStyle } = props;
+      return {
+        articleEditorStyle: {
+          ...articleEditorStyle,
+          showCodeEditor: isVisible,
+        },
+      };
     },
     toggleSidebar(props) {
       const { articleEditorStyle } = props;
