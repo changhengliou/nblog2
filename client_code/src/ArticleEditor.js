@@ -4,22 +4,13 @@ import { connect } from '@/store';
 import EditorBlock from '@/EditorBlock';
 import CodeEditor from '@/CodeEditor';
 
-const grid = 8;
 // snapshot.isDraggingOver
 const getItemStyle = (isDragging, draggableStyle) => ({
   userSelect: 'none',
-  padding: grid * 2,
-  margin: `0 0 ${grid}px 0`,
+  padding: 8 * 2,
+  margin: '0 0 8px 0',
   ...draggableStyle,
 });
-
-const getListStyle = {
-  padding: grid,
-  width: '80%',
-  minHeight: '600px',
-  margin: '65px 10% 20px 10%',
-  border: '1px solid #ccc',
-};
 
 const renderList = items => items.map((e, i) => (
   <Draggable key={e.id} draggableId={e.id} index={i}>
@@ -33,9 +24,8 @@ const renderList = items => items.map((e, i) => (
           snapshot.isDragging,
           provided.draggableProps.style,
         )}
-      >
-        {e.content}
-      </EditorBlock>
+        editorState={e.editorState}
+      />
     )}
   </Draggable>
 ));
@@ -48,7 +38,7 @@ const ArticleEditor = (props) => {
         {provided => (
           <div
             ref={provided.innerRef}
-            style={getListStyle}
+            className="editor-wrap"
           >
             {renderList(editorContent)}
             {provided.placeholder}

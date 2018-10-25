@@ -7,7 +7,7 @@
 - Golang api server
 - React frontend + Graphql
 - MySQL
-- Docker
+- Docker
 - Kubernetes (In the future)
 - Redis (In the future)
 - Rabbit MQ (In the furure)

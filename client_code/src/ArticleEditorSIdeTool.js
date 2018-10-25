@@ -42,7 +42,9 @@ const renderList = items => items.map((e, i) => (
 const ArticleEditorSIdeTool = (props) => {
   const { toolboxContent, style } = props;
   return (
-    <div className={`editor-sidebar ${style.showSideBar ? '' : 'hide'}`}>
+    <div
+      className={`editor-sidebar ${style.showSideBar ? '' : 'hide'}`}
+    >
       <div
         role="button"
         style={{
