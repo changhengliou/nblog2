@@ -13,10 +13,10 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 });
 
 const renderList = items => items.map((e, i) => (
-  <Draggable key={e.id} draggableId={e.id} index={i}>
+  <Draggable key={e.get('id')} draggableId={e.get('id')} index={i}>
     {(provided, snapshot) => (
       <EditorBlock
-        id={e.id}
+        id={e.get('id')}
         innerRef={provided.innerRef}
         provided={provided}
         snapshot={snapshot}
@@ -24,7 +24,7 @@ const renderList = items => items.map((e, i) => (
           snapshot.isDragging,
           provided.draggableProps.style,
         )}
-        editorState={e.editorState}
+        editorState={e.get('editorState')}
       />
     )}
   </Draggable>

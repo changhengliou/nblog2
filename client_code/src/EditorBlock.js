@@ -13,6 +13,24 @@ const getStyle = ({ isDragging }) => ({
   position: 'relative',
 });
 
+const styleMap = {
+  STRIKETHROUGH: {
+    textDecoration: 'line-through',
+  },
+  LINEHEIGHT: {
+    lineHeight: '14px',
+  },
+  FONT: {
+    fontFamily: '-apple-system',
+  },
+  'align-left': {
+    textAlign: 'left',
+  },
+  LINK: {
+
+  },
+};
+
 const onMouseDown = (e) => {
   e.preventDefault();
   e.stopPropagation();
@@ -23,11 +41,9 @@ class EditorBlock extends React.Component {
     super(props);
     this.state = { showControl: false };
     this.editor = React.createRef();
-    this.onChange = actions.onEditorStateChange;
+    this.onChange = (editorState, id) => { actions.onEditorStateChange({ editorState, id }); };
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
     this.mapKeyToEditorCommand = this.mapKeyToEditorCommand.bind(this);
-    this.toggleBlockType = this.toggleBlockType.bind(this);
-    this.toggleInlineStyle = this.toggleInlineStyle.bind(this);
   }
 
   handleKeyCommand(command, editorState) {
@@ -52,24 +68,6 @@ class EditorBlock extends React.Component {
       return;
     }
     return getDefaultKeyBinding(e);
-  }
-
-  toggleBlockType(blockType) {
-    this.onChange(
-      RichUtils.toggleBlockType(
-        this.state.editorState,
-        blockType,
-      ),
-    );
-  }
-
-  toggleInlineStyle(inlineStyle) {
-    this.onChange(
-      RichUtils.toggleInlineStyle(
-        this.state.editorState,
-        inlineStyle,
-      ),
-    );
   }
 
   render() {
@@ -122,7 +120,7 @@ class EditorBlock extends React.Component {
             style={{ minHeight: 'inherit' }}
             onClick={() => {
               if (this.editor.current) {
-                actions.onEditorBlockFocus(id);
+                actions.onCurrentEditorChange(id);
                 this.editor.current.focus();
                 this.setState({ showControl: true });
               }
@@ -130,11 +128,11 @@ class EditorBlock extends React.Component {
             onBlur={() => { this.setState({ showControl: false }); }}
           >
             <Editor
+              customStyleMap={styleMap}
               editorState={editorState}
               handleKeyCommand={this.handleKeyCommand}
               keyBindingFn={this.mapKeyToEditorCommand}
-              onChange={this.onChange}
-              onFocus={() => { console.log(id); }}
+              onChange={e => this.onChange(e, id)}
               placeholder="Template..."
               ref={this.editor}
               spellCheck

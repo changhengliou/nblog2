@@ -1,6 +1,6 @@
 import createStore from 'react-waterfall';
 import { EditorState } from 'draft-js';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 import { getRandomString } from './util';
 
 const deepCopy = e => JSON.parse(JSON.stringify(e));
@@ -30,11 +30,10 @@ const config = {
     onEditorDrop(props, actions, { src, dest }) {
       const { editorContent, toolboxContent } = props;
       const newItem = toolboxContent[src.index];
-      const newList = editorContent.splice(dest.index, 0, {
-        ...newItem,
-        id: getRandomString(),
-        editorState: EditorState.createEmpty(),
-      });
+
+      const newList = editorContent.splice(dest.index, 0, Map(
+        { ...newItem, id: getRandomString(), editorState: EditorState.createEmpty() },
+      ));
       return { editorContent: newList };
     },
     onEditorSwap(props, actions, { src, dest }) {
@@ -45,15 +44,15 @@ const config = {
       return { editorContent: newList };
     },
     onEditorDelete(props, actions, id) {
-      const newList = deepCopy(props.editorContent);
-      newList.splice(newList.findIndex(e => e.id === id), 1);
+      let newList = props.editorContent;
+      newList = newList.splice(newList.findIndex(e => e.get('id') === id), 1);
       return { editorContent: newList };
     },
     onEditorCopy(props, actions, id) {
-      const newList = deepCopy(props.editorContent);
-      const itemIndex = newList.findIndex(e => e.id === id);
-      const item = newList[itemIndex];
-      newList.splice(itemIndex, 0, { ...item, id: getRandomString() });
+      let newList = props.editorContent;
+      const itemIndex = newList.findIndex(e => e.get('id') === id);
+      const item = newList.get(itemIndex).set('id', getRandomString());
+      newList = newList.splice(itemIndex, 0, item);
       return { editorContent: newList };
     },
     // CodeEditor.js, EditorBlock.js
@@ -76,16 +75,14 @@ const config = {
         },
       };
     },
-    onEditorStateChange(props, actions, editorState) {
-      const { editorContent, currentEditor } = props;
-      if (!currentEditor) return {};
-      const newList = editorContent;
-      const index = editorContent.findIndex(e => e.id === currentEditor);
-      newList.get(index).editorState = editorState;
-      console.log(newList.get(index).editorState);
+    onEditorStateChange(props, actions, { editorState, id }) {
+      const { editorContent } = props;
+      const index = editorContent.findIndex(e => e.get('id') === id);
+      const item = editorContent.get(index).set('editorState', editorState);
+      const newList = editorContent.set(index, item);
       return { editorContent: newList };
     },
-    onEditorBlockFocus(props, actions, id) {
+    onCurrentEditorChange(props, actions, id) {
       return { currentEditor: id };
     },
   },
