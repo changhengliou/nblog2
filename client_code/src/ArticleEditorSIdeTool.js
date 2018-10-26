@@ -3,26 +3,26 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { connect, actions } from '@/store';
 import '@/style/articleEditor.css';
 
-const grid = 8;
 
 const getItemStyle = (isDragging, draggableStyle) => ({
   userSelect: 'none',
-  padding: grid * 2,
-  margin: `0 0 ${grid}px 0`,
-  background: isDragging ? 'lightgreen' : 'grey',
+  padding: '0 8px',
+  margin: '0 0 6px 0',
+  border: isDragging ? '2px dashed #aaa' : '0px',
+  width: '100%',
   ...draggableStyle,
 });
 
 const getListStyle = isDraggingOver => ({
   background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  padding: grid,
+  padding: '8px 8px 60px 8px',
   width: 250,
   height: '100%',
   overflow: 'auto',
 });
 
 const renderList = items => items.map((e, i) => (
-  <Draggable key={e.id} draggableId={e.id} index={i}>
+  <Draggable key={`${i + 1}`} draggableId={i} index={i}>
     {(provided, snapshot) => (
       <div
         ref={provided.innerRef}
@@ -33,7 +33,9 @@ const renderList = items => items.map((e, i) => (
           provided.draggableProps.style,
         )}
       >
-        {e.content}
+        { snapshot.isDragging
+          ? null
+          : <img src={e} style={{ width: '100%' }} alt="" /> }
       </div>
     )}
   </Draggable>

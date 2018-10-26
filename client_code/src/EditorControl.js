@@ -20,8 +20,20 @@ const controls = [
   { class: 'fa fa-redo', style: 'redo', type: 'none' }, // ?
 ];
 
+const isSelect = (style, blockType, inlineType) => {
+  if (blockType === style) {
+    return true;
+  }
+  if (inlineType) {
+    return inlineType.has(style);
+  }
+  return false;
+};
 const onToggle = (event, e, { editorState, id }) => {
   event.preventDefault();
+  if (!editorState) {
+    return;
+  }
   if (e.type === 'inline') {
     actions.onEditorStateChange({
       editorState: RichUtils.toggleInlineStyle(editorState, e.style),
@@ -41,18 +53,19 @@ const onToggle = (event, e, { editorState, id }) => {
 const EditorControl = (props) => {
   const { editorState, currentEditor } = props;
   const selection = editorState ? editorState.getSelection() : null;
-  const inlineType = editorState ? editorState.getCurrentInlineStyle() : [];
+  const inlineType = editorState ? editorState.getCurrentInlineStyle() : null;
   const blockType = editorState ? editorState.getCurrentContent()
     .getBlockForKey(selection.getStartKey())
     .getType() : null;
-  console.log(blockType, inlineType);
   return (
     <div className="editor-control">
       { controls.map(e => (
         <span
+          role="button"
           className="control-btn"
           onMouseDown={event => onToggle(event, e, { editorState, id: currentEditor })}
           key={e.style}
+          style={isSelect(e.style, blockType, inlineType) ? { color: '#488cfc', borderColor: '#488cfc' } : null}
         >
           <i className={e.class} />
         </span>
