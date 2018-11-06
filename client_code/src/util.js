@@ -11,3 +11,5 @@ export const getTimeString = (number) => {
 export const getDateTimeString = number => `${getDateString(number)} ${getTimeString(number)}`;
 
 export const getRandomString = () => Math.random().toString(36).substring(2, 15);
+
+export const deepCopy = e => JSON.parse(JSON.stringify(e));

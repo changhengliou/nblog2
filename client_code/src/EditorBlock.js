@@ -1,9 +1,8 @@
 import React from 'react';
-import {
-  Editor, RichUtils, getDefaultKeyBinding,
-} from 'draft-js';
-import 'draft-js/dist/Draft.css';
-import { actions } from '@/store';
+import { Editor } from 'slate-react';
+import { Value } from 'slate';
+import { actions } from './store';
+import { blank } from './richeditor/schema';
 
 const getStyle = ({ isDragging }) => ({
   minHeight: '120px',
@@ -13,23 +12,6 @@ const getStyle = ({ isDragging }) => ({
   position: 'relative',
 });
 
-const styleMap = {
-  STRIKETHROUGH: {
-    textDecoration: 'line-through',
-  },
-  LINEHEIGHT: {
-    lineHeight: '14px',
-  },
-  FONT: {
-    fontFamily: '-apple-system',
-  },
-  'align-left': {
-    textAlign: 'left',
-  },
-  LINK: {
-
-  },
-};
 
 const onMouseDown = (e) => {
   e.preventDefault();
@@ -39,40 +21,16 @@ const onMouseDown = (e) => {
 class EditorBlock extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { showControl: false };
     this.editor = React.createRef();
-    this.onChange = (editorState, id) => { actions.onEditorStateChange({ editorState, id }); };
-    this.handleKeyCommand = this.handleKeyCommand.bind(this);
-    this.mapKeyToEditorCommand = this.mapKeyToEditorCommand.bind(this);
-  }
-
-  handleKeyCommand(command, editorState) {
-    const newState = RichUtils.handleKeyCommand(editorState, command);
-    if (newState) {
-      this.onChange(newState);
-      return true;
-    }
-    return false;
-  }
-
-  mapKeyToEditorCommand(e) {
-    if (e.keyCode === 9 /* TAB */) {
-      const newEditorState = RichUtils.onTab(
-        e,
-        this.state.editorState,
-        4, /* maxDepth */
-      );
-      if (newEditorState !== this.state.editorState) {
-        this.onChange(newEditorState);
-      }
-      return;
-    }
-    return getDefaultKeyBinding(e);
+    this.state = {
+      showControl: false,
+      value: Value.fromJSON(blank),
+    };
   }
 
   render() {
     const {
-      style: draggableStyle, innerRef, provided, snapshot, id, editorState,
+      style: draggableStyle, innerRef, provided, snapshot, id,
     } = this.props;
     const { showControl } = this.state;
     return (
@@ -82,7 +40,7 @@ class EditorBlock extends React.Component {
         {...provided.draggableProps}
         {...provided.dragHandleProps}
       >
-        <div className="RichEditor-editor" style={getStyle(snapshot)}>
+        <div style={getStyle(snapshot)}>
           <div style={{ display: `${showControl ? 'block' : 'none'}` }}>
             <span
               className="editor-block-drag-tab move"
@@ -116,28 +74,27 @@ class EditorBlock extends React.Component {
               <i className="far fa-trash-alt" />
             </span>
           </div>
-          <div
-            style={{ minHeight: 'inherit' }}
-            onClick={() => {
-              if (this.editor.current) {
-                actions.onCurrentEditorChange(id);
-                this.editor.current.focus();
-                this.setState({ showControl: true });
-              }
+          <Editor
+            ref={this.editor}
+            style={{ minHeight: 'inherit', cursor: 'text' }}
+            onBlur={(e, editor) => {
+              e.preventDefault();
+              this.setState({ showControl: false }, () => {
+                editor.blur();
+              });
             }}
-            onBlur={() => { this.setState({ showControl: false }); }}
-          >
-            <Editor
-              customStyleMap={styleMap}
-              editorState={editorState}
-              handleKeyCommand={this.handleKeyCommand}
-              keyBindingFn={this.mapKeyToEditorCommand}
-              onChange={e => this.onChange(e, id)}
-              placeholder="Template..."
-              ref={this.editor}
-              spellCheck
-            />
-          </div>
+            onClick={(e, editor) => {
+              e.preventDefault();
+              this.setState({ showControl: true }, () => {
+                editor.focus();
+                actions.onCurrentEditorChange(id);
+              });
+            }}
+            value={this.state.value}
+            onChange={({ value }) => {
+              this.setState({ value });
+            }}
+          />
         </div>
       </div>
     );

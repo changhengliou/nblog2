@@ -1,6 +1,4 @@
 import React from 'react';
-import { RichUtils } from 'draft-js';
-import { actions } from './store';
 
 const controls = [
   { class: 'fa fa-heading', style: 'header-one', type: 'block' },
@@ -20,59 +18,23 @@ const controls = [
   { class: 'fa fa-redo', style: 'redo', type: 'none' }, // ?
 ];
 
-const isSelect = (style, blockType, inlineType) => {
-  if (blockType === style) {
-    return true;
-  }
-  if (inlineType) {
-    return inlineType.has(style);
-  }
-  return false;
-};
-const onToggle = (event, e, { editorState, id }) => {
-  event.preventDefault();
-  if (!editorState) {
-    return;
-  }
-  if (e.type === 'inline') {
-    actions.onEditorStateChange({
-      editorState: RichUtils.toggleInlineStyle(editorState, e.style),
-      id,
-    });
-  } else if (e.type === 'block') {
-    actions.onEditorStateChange({
-      editorState: RichUtils.toggleBlockType(editorState, e.style),
-      id,
-    });
-  } else {
-    console.log(e.style);
-  }
-};
 
 // add class active
-const EditorControl = (props) => {
-  const { editorState, currentEditor } = props;
-  const selection = editorState ? editorState.getSelection() : null;
-  const inlineType = editorState ? editorState.getCurrentInlineStyle() : null;
-  const blockType = editorState ? editorState.getCurrentContent()
-    .getBlockForKey(selection.getStartKey())
-    .getType() : null;
-  return (
-    <div className="editor-control">
-      { controls.map(e => (
-        <span
-          role="button"
-          className="control-btn"
-          onMouseDown={event => onToggle(event, e, { editorState, id: currentEditor })}
-          key={e.style}
-          style={isSelect(e.style, blockType, inlineType) ? { color: '#488cfc', borderColor: '#488cfc' } : null}
-        >
-          <i className={e.class} />
-        </span>
-      ))
+const EditorControl = () => (
+  <div className="editor-control">
+    { controls.map(e => (
+      <span
+        role="button"
+        className="control-btn"
+        onMouseDown={event => console.log(event)}
+        key={e.style}
+        style={{ color: '#488cfc', borderColor: '#488cfc' }}
+      >
+        <i className={e.class} />
+      </span>
+    ))
     }
-    </div>
-  );
-};
+  </div>
+);
 
 export default EditorControl;

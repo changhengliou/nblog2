@@ -30,27 +30,29 @@ const renderList = items => items.map((e, i) => (
   </Draggable>
 ));
 
-const ArticleEditor = (props) => {
-  const { editorContent, articleEditorStyle } = props;
-  return (
-    <React.Fragment>
-      <Droppable droppableId="editor-drop">
-        {provided => (
-          <div
-            ref={provided.innerRef}
-            className="editor-wrap"
-          >
-            {renderList(editorContent)}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-      <CodeEditor isVisible={articleEditorStyle.showCodeEditor} />
-    </React.Fragment>
-  );
-};
+class ArticleEditor extends React.Component {
+  render() {
+    const { editors, articleEditorStyle } = this.props;
+    return (
+      <React.Fragment>
+        <Droppable droppableId="editor-drop">
+          {provided => (
+            <div
+              ref={provided.innerRef}
+              className="editor-wrap"
+            >
+              {renderList(editors)}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+        <CodeEditor isVisible={articleEditorStyle.showCodeEditor} />
+      </React.Fragment>
+    );
+  }
+}
 
-export default connect(({ editorContent, articleEditorStyle }) => ({
-  editorContent,
+export default connect(({ editors, articleEditorStyle }) => ({
+  editors,
   articleEditorStyle,
 }))(ArticleEditor);

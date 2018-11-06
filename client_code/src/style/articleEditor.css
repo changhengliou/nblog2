@@ -154,19 +154,7 @@
   background: #aaa;
 }
 /* code editor end */
-/* Rich editor start */
-.RichEditor-editor .DraftEditor-root {
-  min-height: inherit;
-}
-.RichEditor-editor .DraftEditor-editorContainer {
-  min-height: inherit;
-}
-.RichEditor-editor .public-DraftEditor-content {
-  min-height: inherit;
-  cursor: text;
-  padding: 6px 12px;
-}
-/* Rich editor end */
+
 
 @media only screen and (max-width: 1031px) {
   .code-editor-wrap, .editor-wrap {
