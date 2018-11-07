@@ -17,6 +17,7 @@ const renderList = items => items.map((e, i) => (
     {(provided, snapshot) => (
       <EditorBlock
         id={e.get('id')}
+        value={e.get('value')}
         innerRef={provided.innerRef}
         provided={provided}
         snapshot={snapshot}

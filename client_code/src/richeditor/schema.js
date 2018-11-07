@@ -6,6 +6,8 @@ export const blank = {
   },
 };
 
-export const profile = {
-
-};
+export const profile = `<p>Enter a string...</p>
+<div>123</div>
+<h1>WWW</h1>
+<a >fb</a>
+`;

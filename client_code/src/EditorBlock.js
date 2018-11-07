@@ -1,8 +1,7 @@
 import React from 'react';
 import { Editor } from 'slate-react';
-import { Value } from 'slate';
 import { actions } from './store';
-import { blank } from './richeditor/schema';
+import { renderNode, renderMark } from './richeditor/tags';
 
 const getStyle = ({ isDragging }) => ({
   minHeight: '120px',
@@ -24,13 +23,12 @@ class EditorBlock extends React.Component {
     this.editor = React.createRef();
     this.state = {
       showControl: false,
-      value: Value.fromJSON(blank),
     };
   }
 
   render() {
     const {
-      style: draggableStyle, innerRef, provided, snapshot, id,
+      style: draggableStyle, innerRef, provided, snapshot, id, value,
     } = this.props;
     const { showControl } = this.state;
     return (
@@ -77,6 +75,9 @@ class EditorBlock extends React.Component {
           <Editor
             ref={this.editor}
             style={{ minHeight: 'inherit', cursor: 'text' }}
+            value={value}
+            renderNode={renderNode}
+            renderMark={renderMark}
             onBlur={(e, editor) => {
               e.preventDefault();
               this.setState({ showControl: false }, () => {
@@ -90,9 +91,11 @@ class EditorBlock extends React.Component {
                 actions.onCurrentEditorChange(id);
               });
             }}
-            value={this.state.value}
-            onChange={({ value }) => {
-              this.setState({ value });
+            onChange={(change) => {
+              actions.onEditorStateChange({
+                value: change.value,
+                id,
+              });
             }}
           />
         </div>

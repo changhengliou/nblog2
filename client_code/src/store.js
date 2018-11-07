@@ -2,8 +2,8 @@ import createStore from 'react-waterfall';
 import { List, Map } from 'immutable';
 import { Value } from 'slate';
 import { getRandomString, deepCopy } from './util';
-import { blank } from './richeditor/schema';
-
+import { profile } from './richeditor/schema';
+import { htmlConverter } from './richeditor/tags';
 
 const config = {
   initialState: {
@@ -82,7 +82,7 @@ const config = {
         {
           ...newItem,
           id: getRandomString(),
-          editorState: Value.fromJSON(blank),
+          value: htmlConverter.deserialize(profile), // Value.fromJSON(blank),
         },
       ));
       return { editors: newList };
@@ -102,8 +102,10 @@ const config = {
     onEditorCopy(props, actions, id) {
       let newList = props.editors;
       const itemIndex = newList.findIndex(e => e.get('id') === id);
-      const item = newList.get(itemIndex).set('id', getRandomString());
-      newList = newList.splice(itemIndex, 0, item);
+      newList = newList.splice(itemIndex, 0, Map({
+        id: getRandomString(),
+        value: Value.fromJSON(newList.get(itemIndex).get('value').toJSON()),
+      }));
       return { editors: newList };
     },
     // CodeEditor.js, EditorBlock.js
@@ -126,10 +128,10 @@ const config = {
         },
       };
     },
-    onEditorStateChange(props, actions, { editorState, id }) {
+    onEditorStateChange(props, actions, { value, id }) {
       const { editors } = props;
       const index = editors.findIndex(e => e.get('id') === id);
-      const item = editors.get(index).set('editorState', editorState);
+      const item = editors.get(index).set('value', value);
       const newList = editors.set(index, item);
       return { editors: newList };
     },
